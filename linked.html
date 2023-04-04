@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<script>
+class Node {
+    constructor(value) {
+        this.value = value || null; // either true for value or true for negatorial
+        this.nextNode = null; // 
+    }
+    getNextNode() {
+        return this.nextNode;
+    }
+}
+
+class LinkedList {
+    constructor() {
+        this.head = null; // the list empty af
+    }
+
+    append(value) {
+        const newNode = new Node(value);
+        if (this.head === null) { // if first node empty, add node
+            this.head = newNode; 
+        } else { // else, repeat through each node until head is null
+            const lastNode = this.getTail(); // getTail while loop to move to end of info
+            lastNode.nextNode = newNode;
+        }
+    }
+
+    prepend(value) {
+        const newNode = new Node(value); // run to create node
+        if (this.head === null) {
+            return (this.head = newNode);
+        }
+        newNode.nextNode = this.head; 
+        this.head = newNode;
+    }
+
+    size() {
+        let lastNode = this.head;
+        let counter = 0;
+        while (lastNode != null) {
+            counter++;
+            lastNode = lastNode.nextNode;
+        }
+        return counter;
+    }
+
+    getHead() { // returns first node on list
+        return this.head;
+    }
+
+    getTail() { // returns last node on list
+        let lastNode = this.head;
+        while (lastNode.getNextNode() != null) {
+            lastNode = lastNode.getNextNode();
+        }
+        return lastNode
+    }
+
+    at(index) {
+        let currentNode = this.head; // 
+        let counter = 0;
+        while (counter < index) {
+            counter++;
+            currentNode = currentNode.getNextNode();
+        }
+        return currentNode;
+    }
+
+    pop() {
+        let lastNode = this.head; // calls head which is list
+        let secondLastNode = null; // this will hold lastnode, while lastnode holds null
+        while (lastNode.getNextNode() != null) { // while, moves to end of list aka actual lastnode
+            secondLastNode = lastNode; // holding lastnode before null
+            lastNode = lastNode.getNextNode(); // this moves to null, completing while loop
+        }
+        secondLastNode.nextNode = null; // this changes secondlastnode, to null, which auto deletes what lastNode is currently assigned to
+    }
+
+    contains(value) {
+        let lastNode = this.head;
+        while (lastNode != null) {
+            if (lastNode.value === value) {
+                return true
+            }
+            lastNode = lastNode.nextNode;
+        }
+        return false
+    }
+
+    find(value) {
+        let currentNode = this.head;
+        let indexCounter = 0;
+        while (currentNode != null) {
+            if (currentNode.value === value) {
+                return indexCounter
+            }
+            currentNode = currentNode.nextNode;
+            indexCounter++;
+        }
+        return "feeling a lack of existence";
+    }
+
+    toString() {
+        let currentNode = this.head;
+        let stringList = "";
+        while (currentNode != null) {
+            stringList += `(${currentNode.value}) --> `;
+            currentNode = currentNode.nextNode;
+        }
+        return (stringList += "null");
+    }
+
+    insertAt(value, index) {
+        if (this.head == null) {
+            this.append(value);
+        } else {
+            const newNode = new Node(value); // creates new node
+            const nodeInQuestion = this.at(index); 
+
+            newNode.nextNode = nodeInQuestion.getNextNode();
+
+            nodeInQuestion.nextNode = newNode;
+        } 
+    }
+
+    removeAt(index) {
+        if (this.head == null) {
+            return "List empty"
+        } else {
+            let nodeToDelete = this.at(index); // 2
+            if (nodeToDelete === this.head) { // if you wanna delete head node
+                return this.head = nodeToDelete.getNextNode();
+            }
+            let prev = this.at(index - 1); // 1
+            let nodeToLink = nodeToDelete.getNextNode(); // 3
+
+            prev.nextNode = nodeToLink; // links prev with node to link, unconnecting nodetodelete
+        }
+    }
+}
+
+const linkedList = new LinkedList();
+linkedList.append(11);
+linkedList.append(10); //pause
+linkedList.append(8);
+linkedList.append(7); // getTail should view this
+
+let currentHead = linkedList.getHead();
+console.log(currentHead.value);
+console.log(linkedList.getTail().value);
+console.log(linkedList.size());
+
+linkedList.prepend(12);
+currentHead = linkedList.getHead();
+console.log(currentHead.value);
+console.log(currentHead.getNextNode().value);
+console.log(linkedList.toString());
+
+console.log(linkedList.at(2).value); // should print 9
+console.log(linkedList.pop()); // deletes last value which is 7
+console.log(linkedList.getTail().value); // should call 8 not 7
+console.log(linkedList.contains(9));
+console.log(linkedList.contains(7));
+console.log(linkedList.find(11));
+console.log(linkedList.find(7));
+
+console.log(linkedList.toString());
+
+console.log(linkedList.insertAt(9,2)); // places 9 at 2nd node
+console.log(linkedList.toString());
+
+console.log(linkedList.removeAt(0));// this deletes the 12 from 2nd node
+console.log(linkedList.toString());
+</script>    
+</body>
+</html>
